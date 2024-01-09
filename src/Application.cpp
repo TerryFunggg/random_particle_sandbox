@@ -3,6 +3,7 @@
 #include "SDL2/SDL_keycode.h"
 #include "Vec2.h"
 #include <SDL2/SDL.h>
+#include <memory>
 #include <string>
 #include "Particle.h"
 
@@ -30,13 +31,17 @@ void Application::Input() {
                 if (event.button.button == SDL_BUTTON_LEFT) {
                     int x,y;
                     SDL_GetMouseState(&x, &y);
-                    Particle* particle = new Particle(x, y, 1.0);
+                    std::shared_ptr<Particle> particle =std::make_shared<Particle>(x, y, 1.0);
                     particle->radius = 20;
                     particles.push_back(particle);
                 }
                 if (event.key.keysym.sym == SDLK_SPACE) {
                     for(int i = 0; i < 10; i++) {
-                        Particle* particle = new Particle(static_cast<int>(Graphics::Width() / 2), static_cast<int>(Graphics::Height() / 2), 1.0);
+                        auto particle = std::make_shared<Particle>(
+                            static_cast<int>(Graphics::Width() / 2),
+                            static_cast<int>(Graphics::Height() / 2),
+                            1.0
+                        );
                         particle->radius = 20;
                         particles.push_back(particle);
                     }
@@ -102,8 +107,5 @@ void Application::Render() {
 }
 
 void Application::Destroy() {
-    for (auto particle: particles) {
-        delete particle;
-    }
     Graphics::CloseWindow();
 }

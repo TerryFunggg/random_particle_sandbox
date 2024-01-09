@@ -16,7 +16,7 @@ class Application {
     private:
         bool running = false;
 
-        std::vector<Particle*> particles;
+        std::vector<std::shared_ptr<Particle>> particles;
 
     public:
         Application() = default;
